@@ -14,6 +14,20 @@ struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var score = 0
+    
+  // Day 24 - Challenge 3
+    struct FlagImage: View {
+        var image: String
+        
+        var body: some View {
+        Image(image)
+            .renderingMode(.original)
+            .clipShape(Capsule())
+            
+                .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+                    .shadow(color: .black, radius: 2)
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -33,12 +47,13 @@ struct ContentView: View {
                     Button(action: {
                         self.flagTapped(number)
                     }) {
-                        Image(self.countries[number])
-                            .renderingMode(.original)
-                            .clipShape(Capsule())
-                            
-                                .overlay(Capsule().stroke(Color.black, lineWidth: 1))
-                                    .shadow(color: .black, radius: 2)
+                        FlagImage(image: self.countries[number])
+//                        Image(self.countries[number])
+//                            .renderingMode(.original)
+//                            .clipShape(Capsule())
+//
+//                                .overlay(Capsule().stroke(Color.black, lineWidth: 1))
+//                                    .shadow(color: .black, radius: 2)
                     }
                 }
                 Spacer()
