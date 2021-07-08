@@ -14,6 +14,10 @@ struct ContentView: View {
     @State private var showingScore = false
     @State private var scoreTitle = ""
     @State private var score = 0
+    @State private var animationAmount = 0.0
+    @State private var animationOpacity = 1.0
+    @State private var animationScale: CGFloat = 1
+ 
     
   // Day 24 - Challenge 3
     struct FlagImage: View {
@@ -45,16 +49,23 @@ struct ContentView: View {
                 }
                 ForEach(0..<3) { number in
                     Button(action: {
-                        self.flagTapped(number)
+                        withAnimation {
+                            self.flagTapped(number)
+                        }
+                                                
                     }) {
                         FlagImage(image: self.countries[number])
-//                        Image(self.countries[number])
-//                            .renderingMode(.original)
-//                            .clipShape(Capsule())
-//
-//                                .overlay(Capsule().stroke(Color.black, lineWidth: 1))
-//                                    .shadow(color: .black, radius: 2)
+                            .rotation3DEffect(
+                                .degrees(number == correctAnswer ? animationAmount : 0.0),
+                                axis: /*@START_MENU_TOKEN@*/(x: 0.0, y: 1.0, z: 0.0)/*@END_MENU_TOKEN@*/
+                            )
+                            .opacity(number == correctAnswer ? 1.0 : animationOpacity)
+                            .scaleEffect(number == correctAnswer ? 1.0 : animationScale)
+                        
+                            
+
                     }
+                   
                 }
                 Spacer()
             }
@@ -72,8 +83,12 @@ struct ContentView: View {
         if number == correctAnswer {
             scoreTitle = "Correct"
             score += 1
+            animationAmount += 360
+            animationOpacity = 0.25
         } else {
             scoreTitle = "Wrong! That's \(countries[number])"
+            animationScale = 0.5
+            
         }
         
         showingScore = true
@@ -82,6 +97,9 @@ struct ContentView: View {
     func askQuestion() {
         countries.shuffle()
         correctAnswer = Int.random(in: 0...2)
+        animationOpacity = 1
+        animationScale = 1.0
+        
     }
 }
 
